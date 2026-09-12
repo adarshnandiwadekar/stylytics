@@ -19,3 +19,8 @@ Stylytics does not invent clothing images. Demo garment images and uploaded phot
 ### Verification
 
 `pnpm check`, `pnpm build`, and the Vitest suite pass for this checkpoint. The landing page, Closet, Try-On, Gallery, and Set the Scene routes are registered in `client/src/App.tsx` and share `StyleShell` navigation and the same state source.
+
+
+### AI two-garment generation
+
+Try-On now requires exactly two real Closet garments for its AI path. The server calls the built-in LLM to curate only those two pieces for the selected context, then sends the body photo plus both garment references to the server-side image service. The generated result is labeled `AI-Curated Fit · Experimental Preview`. API credentials remain server-only. If the provider is unavailable, the manual overlay remains available and the UI reports the failure honestly.
