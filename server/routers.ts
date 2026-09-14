@@ -70,7 +70,7 @@ export const appRouter = router({
           });
           const raw = responseText(curation.choices[0]?.message.content);
           const style = JSON.parse(raw) as { title: string; rationale: string; pairing: string };
-          const prompt = `Create a realistic editorial virtual try-on image using the provided body photo and exactly the two provided real garment references. Preserve the person's identity, face, skin tone, hair, proportions, pose, and the garments' actual color, pattern, silhouette, and material. Fit and layer the two garments naturally as a complete outfit. Do not add any other clothing, accessories, jewelry, shoes, bags, text, logos, or invented garments. Keep the scene clean and fashion-editorial. Stylist title: ${style.title}. Pairing direction: ${style.pairing}. Rationale: ${style.rationale}.`;
+          const prompt = `Create a tasteful, fully clothed adult fashion-catalog virtual try-on image using the provided body photo and exactly the two provided real garment references. Preserve the adult person's identity, face, skin tone, hair, proportions, pose, and the garments' actual color, pattern, silhouette, and material. Fit and layer the two garments naturally as a complete everyday outfit. Do not add any nudity, lingerie, sexualized posing, exposed body areas, other clothing, accessories, jewelry, shoes, bags, text, logos, or invented garments. Keep the scene clean, respectful, and fashion-editorial. Stylist title: ${style.title}. Pairing direction: ${style.pairing}. Rationale: ${style.rationale}.`;
           const generated = await generateImage({
             prompt,
             quality: "medium",
