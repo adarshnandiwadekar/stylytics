@@ -3,8 +3,9 @@ import { buildLook, DEMO_ITEMS, OCCASIONS, labelOccasion } from "../client/src/l
 
 describe("stylytics shared style data", () => {
   it("keeps one canonical occasion taxonomy", () => {
-    expect(OCCASIONS).toEqual(["casual", "work", "date", "party", "wedding", "travel", "everyday"]);
+    expect(OCCASIONS).toEqual(["casual", "work", "date", "party", "wedding", "traditional", "travel", "everyday"]);
     expect(labelOccasion("everyday")).toBe("Everyday");
+    expect(labelOccasion("traditional")).toBe("Traditional");
   });
 
   it("composes a visual-ready look from real closet items", () => {

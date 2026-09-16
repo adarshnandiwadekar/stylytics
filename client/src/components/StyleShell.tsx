@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
-import { ArrowUpRight, CircleUserRound, Layers3, Menu, Sparkles, Shirt, X } from "lucide-react";
-import { useState } from "react";
+import { ArrowUpRight, CircleUserRound, Layers3, Menu, Sparkles, Shirt, WandSparkles, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { StyleItem } from "@/lib/styleData";
@@ -8,6 +8,7 @@ import type { StyleItem } from "@/lib/styleData";
 const navItems = [
   { href: "/closet", label: "My Closet", icon: Shirt },
   { href: "/try-on", label: "Try-On", icon: Sparkles },
+  { href: "/you-choose", label: "You Choose", icon: WandSparkles },
   { href: "/gallery", label: "Gallery", icon: Layers3 },
   { href: "/profile", label: "Set the Scene", icon: CircleUserRound },
 ];
@@ -15,6 +16,19 @@ const navItems = [
 export function StyleShell({ children }: { children: React.ReactNode }) {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  useEffect(() => {
+    setOpen(false);
+  }, [location]);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
+
   return (
     <div className="min-h-screen bg-[#F3F1FF] text-[#18152B]">
       <header className="sticky top-0 z-40 border-b border-[#18152B]/10 bg-[#F3F1FF]/90 backdrop-blur-xl">
@@ -24,7 +38,7 @@ export function StyleShell({ children }: { children: React.ReactNode }) {
             <span className="font-display text-[21px] font-semibold tracking-[-.04em]">stylytics<span className="text-[#FF6B57]">.</span></span>
           </Link>
           <nav className="hidden items-center gap-1 md:flex">
-            {navItems.map(({ href, label, icon: Icon }) => <Link key={href} href={href} className={cn("flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/70", location === href && "bg-white shadow-sm") }><Icon size={15} strokeWidth={2.2} />{label}</Link>)}
+            {navItems.map(({ href, label, icon: Icon }) => <Link key={href} href={href} aria-current={location === href ? "page" : undefined} className={cn("flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium transition-colors hover:bg-white/70", location === href && "bg-white shadow-sm") }><Icon size={15} strokeWidth={2.2} />{label}</Link>)}
           </nav>
           <div className="hidden items-center gap-3 md:flex">
             <div className="hidden text-right xl:block"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#18152B]/45">Wardrobe health</p><p className="text-sm font-semibold">82% in rotation</p></div>
@@ -32,7 +46,7 @@ export function StyleShell({ children }: { children: React.ReactNode }) {
           </div>
           <button className="flex h-10 w-10 items-center justify-center rounded-full bg-white md:hidden" onClick={() => setOpen((v) => !v)} aria-label="Toggle menu">{open ? <X size={19} /> : <Menu size={19} />}</button>
         </div>
-        {open && <div className="border-t border-[#18152B]/10 bg-[#F3F1FF] px-5 py-4 md:hidden">{navItems.map(({ href, label, icon: Icon }) => <Link key={href} href={href} onClick={() => setOpen(false)} className={cn("flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium", location === href && "bg-white") }><Icon size={17} />{label}</Link>)}</div>}
+        {open && <div className="border-t border-[#18152B]/10 bg-[#F3F1FF] px-5 py-4 shadow-lg md:hidden">{navItems.map(({ href, label, icon: Icon }) => <Link key={href} href={href} aria-current={location === href ? "page" : undefined} onClick={() => setOpen(false)} className={cn("flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium", location === href && "bg-white") }><Icon size={17} />{label}</Link>)}</div>}
       </header>
       {children}
     </div>

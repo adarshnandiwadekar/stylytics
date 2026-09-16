@@ -9,6 +9,7 @@ import Closet from "./pages/Closet";
 import TryOn from "./pages/TryOn";
 import Gallery from "./pages/Gallery";
 import Profile from "./pages/Profile";
+import YouChoose from "./pages/YouChoose";
 
 function Router() {
   return <Switch>
@@ -17,6 +18,7 @@ function Router() {
     <Route path="/try-on" component={TryOn} />
     <Route path="/gallery" component={Gallery} />
     <Route path="/profile" component={Profile} />
+    <Route path="/you-choose" component={YouChoose} />
     <Route path="/404" component={NotFound} />
     <Route component={NotFound} />
   </Switch>;
