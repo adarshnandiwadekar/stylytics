@@ -20,7 +20,7 @@ import { type StyleItem, useAppState } from "@/lib/styleData";
 import { trpc } from "@/lib/trpc";
 import { toast } from "sonner";
 
-const demoPhoto = "/manus-storage/stylytics-neutral-look_da45ffbc.jpg";
+const demoPhoto = "/manus-storage/neutral-look_116aef4f.jpeg";
 const MAX_UPLOAD_BYTES = 12 * 1024 * 1024;
 const DEFAULT_LAYER_ASPECT = 0.8;
 

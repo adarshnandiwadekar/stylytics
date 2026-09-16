@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import { Filter, Grid2X2, List, Plus, Search, Sparkles, Trash2, X } from "lucide-react";
+import { Cloud, Filter, Grid2X2, List, Plus, Search, Sparkles, Trash2, X } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { CATEGORIES, OCCASIONS, type Occasion, labelOccasion, useAppState } from
 import { toast } from "sonner";
 
 export default function Closet() {
-  const [state, commit] = useAppState();
+  const [state, commit, syncToAccount, isAuthenticated, syncing] = useAppState();
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
   const [occasion, setOccasion] = useState<"all" | Occasion>("all");
@@ -57,9 +57,13 @@ export default function Closet() {
 
   const toggleSelected = (id: string) => setSelected((ids) => ids.includes(id) ? ids.filter((itemId) => itemId !== id) : ids.length >= 2 ? (toast.error("AI curation uses exactly two garments."), ids) : [...ids, id]);
   const toggleOccasion = (value: Occasion) => setPendingOccasions((values) => values.includes(value) ? values.filter((item) => item !== value) : [...values, value]);
+  const saveToAccount = async () => {
+    if (!isAuthenticated) { toast.info("Sign in from the profile button to save your Closet across devices."); return; }
+    try { await syncToAccount(); toast.success("Closet saved to your account."); } catch (error) { toast.error(error instanceof Error ? error.message : "Could not save your Closet."); }
+  };
 
   return <StyleShell><main className="mx-auto max-w-[1320px] px-5 py-10 lg:px-10 lg:py-14">
-    <PageIntro eyebrow="Your real wardrobe" title="My Closet" description="Add every piece with the moments it belongs to. Stylytics uses these occasion tags when it chooses an outfit for you." action={<><input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => onFilePicked(event.target.files?.[0])} /><Button className="rounded-full bg-[#FF6B57] text-[#18152B] hover:bg-[#ff836f]" onClick={() => inputRef.current?.click()}><Plus size={17} /> Add a piece</Button></>} />
+    <PageIntro eyebrow="Your real wardrobe" title="My Closet" description="Add every piece with the moments it belongs to. Stylytics uses these occasion tags when it chooses an outfit for you." action={<div className="flex flex-wrap justify-end gap-2"><input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => onFilePicked(event.target.files?.[0])} /><Button variant="outline" className="rounded-full bg-white" onClick={saveToAccount} disabled={syncing}><Cloud size={16} /> {syncing ? "Saving…" : "Save to account"}</Button><Button className="rounded-full bg-[#FF6B57] text-[#18152B] hover:bg-[#ff836f]" onClick={() => inputRef.current?.click()}><Plus size={17} /> Add a piece</Button></div>} />
 
     <div className="mb-8 grid gap-3 sm:grid-cols-3"><Stat label="Pieces in rotation" value={String(state.items.length)} note="real items" color="bg-[#18152B] text-white" /><Stat label="Most expressive" value="Blush" note="your current hue" color="bg-[#FFD166]" /><Stat label="Outfit potential" value="18+" note="combinations ready" color="bg-[#78D5B0]" /></div>
 
